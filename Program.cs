@@ -30,6 +30,12 @@ app.MapPut("/todoitems/{id}", async (int id, Todo inputTodo, TodoDb db) =>
     var todo = await db.Todos.FindAsync(id);
     // checking for possible error?
     if (todo is null) return Results.NotFound();
+
+    todo.Name = inputTodo.Name;
+    todo.IsComplete = inputTodo.IsComplete;
+
+    await db.SaveChangesAsync();
+    return Results.NoContent();
 });
 
 app.Run();
