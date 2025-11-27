@@ -3,7 +3,26 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<TodoDb>(opt => opt.useInMemoryDatabase("TodoList"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddOpenApiDocument(config =>
+{
+    config.DocumentName = "TodoAPI";
+    config.Title = "TodoAPI v1";
+    config.Version = "v1";
+});
 var app = builder.Build();
+if (app.Environment.IsDevelopment())
+{
+    app.UseOpenApi();
+    app.UseSwaggerUi(config =>
+    {
+        config.DocumentTitle = "TodoAPI";
+        config.Path = "/swagger";
+        config.DocumentPath = "/swagger/{documentName}/swagger.json";
+        config.DocExpansion = "list";
+    });
+}
 
 app.MapGet("/todoitems", async (TodoDb db) => 
     await db.Todos.ToListAsync());
@@ -36,6 +55,17 @@ app.MapPut("/todoitems/{id}", async (int id, Todo inputTodo, TodoDb db) =>
 
     await db.SaveChangesAsync();
     return Results.NoContent();
+});
+
+app.MapDelete("/todoitems/{id}", async (int id, TodoDb db) =>
+{
+    if (await db.Todos.FindAsync(id) is Todo todo)
+    {
+        db.Todos.Remove(todo);
+        await db.SaveChangesAsync();
+        return Results.NoContent();
+    }
+    return Results.NotFound();
 });
 
 app.Run();
