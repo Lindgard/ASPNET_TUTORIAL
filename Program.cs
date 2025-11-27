@@ -28,6 +28,8 @@ app.MapPost("/todoitems", async (Todo todo, TodoDb db) =>
 app.MapPut("/todoitems/{id}", async (int id, Todo inputTodo, TodoDb db) =>
 {
     var todo = await db.Todos.FindAsync(id);
-})
+    // checking for possible error?
+    if (todo is null) return Results.NotFound();
+});
 
 app.Run();
