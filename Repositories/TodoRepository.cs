@@ -27,4 +27,9 @@ public class TodoRepository : ITodoRepository
         _db.Todos.Update(todo);
         await _db.SaveChangesAsync();
     }
+    public async Task DeleteAsync(Todo todo)
+    {
+        _db.Todos.Remove(todo);
+        await _db.SaveChangesAsync();
+    }
 }
