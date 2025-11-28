@@ -1,10 +1,10 @@
-using TodoApi;
 using TodoApi.DTO;
 using TodoApi.Models;
+using ITodoRepository = ITodoRepository.ITodoRepository;
+using ITodoService = ITodoService.ITodoService;
 
 namespace TodoApi.Services
 {
-
     public class TodoService : ITodoService
     {
         private readonly ITodoRepository _repo;
@@ -44,7 +44,7 @@ namespace TodoApi.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var todo = _repo.GetByIdAsync(id);
+            var todo = await _repo.GetByIdAsync(id);
             if (todo is null) return false;
 
             await _repo.DeleteAsync(todo);

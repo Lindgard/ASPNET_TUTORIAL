@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
-using ServiceInterface;
 using TodoApi.DTO;
-using TodoApi.Services.ITodoService;
+using ITodoService = ITodoService.ITodoService;
+
+namespace TodoApi.Controllers;
 
 public static class TodoController
 {
@@ -11,9 +11,9 @@ public static class TodoController
             Results.Ok(await service.GetAllAsync()));
 
         app.MapGet("/todoitems/complete", async (ITodoService service) =>
-            Results.Ok(await service.GetAllAsync()));
+            Results.Ok(await service.GetCompletedAsync()));
 
-        app.MapGet("/todoitems/{id}", async (CreateTodoItemDto dto, ITodoService service) =>
+        app.MapGet("/todoitems/{id}", async (int id, ITodoService service) =>
         {
             var result = await service.GetByIdAsync(id);
             return result is null ? Results.NotFound() : Results.Ok(result);

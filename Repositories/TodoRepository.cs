@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TodoApi.Data;
 using TodoApi.Models;
+using ITodoRepository = ITodoRepository.ITodoRepository;
 
 namespace Repositories
 {

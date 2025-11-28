@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using TodoApi.Data;
 using TodoApi.Services;
-using TodoApi.Services.ServiceInterface;
-using TodoApi.Repositories;
-using TodoApi.Repositories.ITodoRepository;
+using TodoApi.Controllers;
+using ITodoRepository = ITodoRepository.ITodoRepository;
+using ITodoService = ITodoService.ITodoService;
+using Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,16 +22,19 @@ builder.Services.AddOpenApiDocument(config =>
 });
 
 //* Dependency injection
-builder.Services.AddScoped<ITodoRepository, TodoRepositories>();
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddScoped<ITodoRepository, TodoRepository>();
+builder.Services.AddScoped<ITodoService, TodoService>();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseOpenApi();
-    app.UseSwaggerUi(Config =>
+    app.UseSwaggerUi(config =>
     {
-
-    })
+        config.Path = "/swagger";
+    });
 }
+
+app.MapTodoController();
+app.Run();
