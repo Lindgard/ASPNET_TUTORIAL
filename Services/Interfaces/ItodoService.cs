@@ -1,5 +1,5 @@
 using TodoApi.DTO;
-namespace TodoApi
+namespace ITodoService
 {
     public interface ITodoService
     {
