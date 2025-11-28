@@ -1,3 +1,5 @@
+namespace TodoApi.DTO;
+
 public class TodoItemDto
 {
     public int id { get; set; }
