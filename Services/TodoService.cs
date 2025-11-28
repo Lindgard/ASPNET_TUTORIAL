@@ -29,6 +29,22 @@ public class TodoService : ITodoService
     }
     public async Task<bool> UpdateAsync(int id, UpdateTodoItemDto dto)
     {
+        var existing = await _repo.GetByIdAsync(id);
+        if (existing is null) return false;
 
+        existing.Name = dto.Name;
+        existing.IsComplete = dto.IsComplete;
+
+        await _repo.UpdateAsync(existing);
+        return true;
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var todo = _repo.GetByIdAsync(id);
+        if (todo is null) return false;
+
+        await _repo.DeleteAsync(todo);
+        return true;
     }
 }
