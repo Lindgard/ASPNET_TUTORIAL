@@ -8,7 +8,8 @@ This guide explains how namespaces and using statements work in C#, using exampl
 
 Think of a **namespace** as a container or folder that organizes your code. It's like putting items in labeled boxes so you know where to find them.
 
-**Real-world analogy:** 
+**Real-world analogy:**
+
 - If you have a toolbox, the namespace is like the label on the toolbox
 - Inside are different tools (your classes)
 - You might have a "Power Tools" box and a "Hand Tools" box - these are different namespaces
@@ -40,6 +41,7 @@ public class Todo
 ```
 
 **What this means:**
+
 - The `Todo` class lives inside the `TodoApi.Models` namespace
 - To use this class elsewhere, you need to know its full "address": `TodoApi.Models.Todo`
 - It's like an address: `TodoApi.Models` is the street, `Todo` is the house
@@ -105,6 +107,7 @@ builder.Services.AddDbContext<TodoDb>(...);  // Instead of TodoApi.Data.TodoDb
 ```
 
 **Breakdown:**
+
 - Line 1: `using Microsoft.EntityFrameworkCore;`
   - This lets you use `DbContext`, `DbSet`, etc. from the Entity Framework library
   - Without it, you'd write `Microsoft.EntityFrameworkCore.DbContext`
@@ -135,6 +138,7 @@ namespace TodoApi.Services
 ```
 
 **Why these using statements?**
+
 - `using TodoApi.DTO;` → Lets you use `TodoItemDto`, `CreateTodoItemDto`, etc. without the full name
 - `using TodoApi.Models;` → Lets you use `Todo` class
 - The last two are **aliases** (explained below)
@@ -153,11 +157,13 @@ using ITodoService = ITodoService.ITodoService;
 ```
 
 **What this does:**
+
 - These interfaces are in namespaces that share the same name as the interface itself
 - `ITodoService.ITodoService` means: "The namespace is `ITodoService` AND the interface is also named `ITodoService`"
 - The alias says: "When I write `ITodoService`, I mean `ITodoService.ITodoService`"
 
 **Full form vs Alias:**
+
 ```csharp
 // Without alias (verbose):
 ITodoService.ITodoService service = ...;
@@ -202,6 +208,7 @@ public class Todo
 ## Rules and Best Practices
 
 ### Rule 1: Using Statements Go at the Top
+
 ```csharp
 // ✅ CORRECT
 using System;
@@ -220,6 +227,7 @@ using System;  // Error! Using must come before namespace
 ```
 
 ### Rule 2: Order Matters for Clarity (but not functionally)
+
 ```csharp
 // Typical order:
 // 1. External libraries (System, Microsoft, etc.)
@@ -234,6 +242,7 @@ using ITodoService = ITodoService.ITodoService;  // Alias
 ```
 
 ### Rule 3: Namespace Matches Folder Structure (Convention)
+
 ```csharp
 // File location: Models/Todo.cs
 namespace TodoApi.Models;  // Matches the folder structure
@@ -245,6 +254,7 @@ namespace TodoApi.Services;  // Matches the folder structure
 This makes it easier to find files!
 
 ### Rule 4: You Can Use Fully Qualified Names
+
 ```csharp
 // Even without using statements, you can always use the full name:
 var todo = new TodoApi.Models.Todo();
@@ -255,6 +265,7 @@ var todo = new TodoApi.Models.Todo();
 ## Common Mistakes to Avoid
 
 ### Mistake 1: Forgetting Using Statement
+
 ```csharp
 // ❌ This won't compile - Todo is not recognized
 namespace MyProject;
@@ -269,6 +280,7 @@ public class MyClass
 ```
 
 **Fix:**
+
 ```csharp
 // ✅ Add the using statement
 using TodoApi.Models;
@@ -285,6 +297,7 @@ public class MyClass
 ```
 
 ### Mistake 2: Wrong Namespace
+
 ```csharp
 // ❌ Wrong namespace
 namespace WrongNamespace;
@@ -293,6 +306,7 @@ public class TodoService  // This won't match your using statements
 ```
 
 **Fix:**
+
 ```csharp
 // ✅ Correct namespace
 namespace TodoApi.Services;
@@ -399,6 +413,7 @@ app.MapTodoController();     // Q: Which namespace is MapTodoController from?
 ```
 
 **Answers:**
+
 - `using TodoApi.Data;` allows you to use `TodoDb` directly
 - `TodoDb` is from `TodoApi.Data` namespace
 - `TodoService` is from `TodoApi.Services` namespace
@@ -407,4 +422,3 @@ app.MapTodoController();     // Q: Which namespace is MapTodoController from?
 ---
 
 I hope this helps! Namespaces are just organizational tools - like folders on your computer, but for code!
-
