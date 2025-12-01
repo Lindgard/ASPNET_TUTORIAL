@@ -179,3 +179,4 @@ var todo = new MyTodo();
 - **Namespace** = The address of your class  
 - **Using statement** = Adding that address to your "contacts" so you can call it by its short name
 
+
